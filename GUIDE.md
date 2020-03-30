@@ -40,7 +40,7 @@ You can use [Etcher.io](https://etcher.io) to burn the SD card.
 
 Before booting set up an empty file called `ssh` in /boot/ on the SD card.
 
-Use Raspbian Stretch Lite
+Use Raspbian Stretch Lite.  **Now using Raspbian Buster Lite**
 
 > Update: I previously recommended downloading Raspbian Jessie instead of Stretch. At time of writing (3 Jan 2018) Stretch is now fully compatible.
 
@@ -69,15 +69,18 @@ static domain_name_servers=8.8.8.8
 
 Hit Control + D.
 
-Change 100 for 101, 102, 103 etc.
+Change 100 for 101, 102, 103 etc.  **You might also need to change the router to your own router address**. **If your router also provides hostname services, you can add your router address before the domain name server, eg ```domain_name_servers=192.168.1.254 8.8.8.8```
 
 You may also need to make a reservation on your router's DHCP table so these addresses don't get given out to other devices on your network.
+
 
 * Enable `bridge-nf-call-iptables`
 
 ```sh
 sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
+
+**if this gives an error, might need to run modprobe ```br_netfilter``` first
 
 * Install Docker
 
@@ -200,7 +203,7 @@ Your join token is valid for 24 hours, so save it into a text file. Here's an ex
 $ kubeadm join --token 9e700f.7dc97f5e3a45c9e5 192.168.0.27:6443 --discovery-token-ca-cert-hash sha256:95cbb9ee5536aa61ec0239d6edd8598af68758308d0a0425848ae1af28859bea
 ```
 
-* Check everything worked:
+* Check everything worked (could take a while for everything to be running - 10-15 mins):
 
 ```
 $ kubectl get pods --namespace=kube-system
@@ -222,7 +225,7 @@ Some users have reported stability issues with Weave Net on ARMHF. These issues 
 
 #### Weave Net
 
-Install [Weave Net](https://www.weave.works/oss/net/) network driver
+Install [Weave Net](https://www.weave.works/oss/net/) network driver. (2x coredns pods was stuck in pending until after this was run and pi rebooted)
 
 ```
 $ kubectl apply -f \
