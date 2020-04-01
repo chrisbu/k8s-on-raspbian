@@ -40,7 +40,7 @@ You can use [Etcher.io](https://etcher.io) to burn the SD card.
 
 Before booting set up an empty file called `ssh` in /boot/ on the SD card.
 
-Use Raspbian Stretch Lite.  **Now using Raspbian Buster Lite**
+Use Raspbian Stretch Lite.  **Chris: Using Raspbian Buster Lite with xfce**
 
 > Update: I previously recommended downloading Raspbian Jessie instead of Stretch. At time of writing (3 Jan 2018) Stretch is now fully compatible.
 
@@ -69,7 +69,9 @@ static domain_name_servers=8.8.8.8
 
 Hit Control + D.
 
-Change 100 for 101, 102, 103 etc.  **You might also need to change the router to your own router address**. **If your router also provides hostname services, you can add your router address before the domain name server, eg ```domain_name_servers=192.168.1.254 8.8.8.8```
+Change 100 for 101, 102, 103 etc.  
+
+**Chris: You might also need to change the router to your own router address**. **If your router also provides hostname services, you can add your router address before the domain name server, eg ```domain_name_servers=192.168.1.254 8.8.8.8```***
 
 You may also need to make a reservation on your router's DHCP table so these addresses don't get given out to other devices on your network.
 
@@ -80,7 +82,7 @@ You may also need to make a reservation on your router's DHCP table so these add
 sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
 
-**if this gives an error, might need to run modprobe ```br_netfilter``` first
+**Chris: if this gives an error, might need to run ```sudo modprobe br_netfilter``` first**
 
 * Install Docker
 
@@ -155,6 +157,7 @@ $ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key a
 ```
 $ sudo kubeadm config images pull -v3
 ```
+**Chris: I chose flannel, not weave net**
 
 If using Weave Net
 
@@ -164,7 +167,7 @@ If using Weave Net
 $ sudo kubeadm init --token-ttl=0
 ```
 
-If using Flannel:
+If using Flannel:  **Chris: this one...**
 
 * Initialize your master node with a Pod network CIDR:
 
@@ -247,6 +250,19 @@ On each node that joins including the master:
 ```
 $ sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
+
+**Chris: Also had to do the following on all notes (master and other nodes)**
+
+```also had to edit this to enable networking```
+/etc/sysctl.d/99-sysctl.conf
+```sudo nano /etc/sysctl.d/99-sysctl.conf```
+
+uncomment the line
+```net.ipv4.ip_forward=1```
+
+add the lines
+```net.bridge.bridge-nf-call-iptables = 1```
+```net.bridge.bridge-nf-call-ip6tables = 1```
 
 ### Join other nodes
 
@@ -359,8 +375,9 @@ subjects:
 
 This is the development/alternative dashboard which has TLS disabled and is easier to use.
 
+**Chris: Edited this to latest url**
 ```
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/alternative/kubernetes-dashboard-arm-head.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc7/aio/deploy/recommended.yaml
 ```
 
 You can then find the IP and port via `kubectl get svc -n kube-system`. To access this from your laptop you will need to use `kubectl proxy` and navigate to `http://localhost:8001/` on the master, or tunnel to this address with `ssh`.
