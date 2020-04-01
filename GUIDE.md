@@ -253,8 +253,8 @@ $ sudo sysctl net.bridge.bridge-nf-call-iptables=1
 
 **Chris: Also had to do the following on all notes (master and other nodes)**
 
-```also had to edit this to enable networking```
-/etc/sysctl.d/99-sysctl.conf
+Also had to edit `/etc/sysctl.d/99-sysctl.conf` to enable networking
+
 ```sudo nano /etc/sysctl.d/99-sysctl.conf```
 
 uncomment the line
