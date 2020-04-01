@@ -75,9 +75,19 @@ You may also need to make a reservation on your router's DHCP table so these add
 
 * Enable `bridge-nf-call-iptables`
 
+
 ```sh
 sudo sysctl net.bridge.bridge-nf-call-iptables=1
 ```
+
+and
+```
+sudo sysctl net.ipv4.ip_forward=1
+```
+
+You might need to run `sudo modprobe br_netfilter` if the either of the above commands gives an error.
+
+
 
 * Install Docker
 
